@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MovieMate – Profile</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .profile-card {
+      background-color: #1a1a2e;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      background-color: #7B5FFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+    }
+    .profile-name {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-email {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 28px;
+      padding: 20px;
+      background-color: #12122a;
+      border-radius: 12px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #7B5FFF;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .profile-menu {
+      list-style: none;
+    }
+    .profile-menu li {
+      padding: 14px 0;
+      border-bottom: 1px solid #2a2a3e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .profile-menu li:hover { color: #7B5FFF; }
+    .profile-menu li:last-child { border-bottom: none; }
+    .logout-btn {
+      width: 100%;
+      margin-top: 24px;
+      padding: 12px;
+      background-color: rgba(244, 67, 54, 0.15);
+      border: 1px solid #f44336;
+      color: #f44336;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">Movie<span>Mate</span></div>
+    <ul class="navbar-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="watchlist.html">Watchlist</a></li>
+      <li><a href="profile.html" class="active">Profile</a></li>
+      <li><a href="#" onclick="logoutUser()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="section">
+    <div class="profile-card">
+      <div class="profile-avatar" id="avatar"></div>
+      <div class="profile-name" id="profile-name"></div>
+      <div class="profile-email" id="profile-email"></div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number" id="stat-total">0</div>
+          <div class="stat-label">Total Saved</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="stat-watched">0</div>
+          <div class="stat-label">Watched</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" id="stat-unwatched">0</div>
+          <div class="stat-label">To Watch</div>
+        </div>
+      </div>
+
+      <ul class="profile-menu">
+        <li onclick="window.location.href='watchlist.html'">
+          <span>📋 My Watchlist</span><span>›</span>
+        </li>
+        <li onclick="window.location.href='search.html'">
+          <span>🔍 Search Movies</span><span>›</span>
+        </li>
+        <li onclick="window.location.href='home.html'">
+          <span>🏠 Home</span><span>›</span>
+        </li>
+      </ul>
+
+      <button class="logout-btn" onclick="logoutUser()">Log Out</button>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/watchlist.js"></script>
+  <script>
+    const user = requireAuth();
+    document.getElementById('avatar').textContent = user.username.charAt(0).toUpperCase();
+    document.getElementById('profile-name').textContent = user.username;
+    document.getElementById('profile-email').textContent = user.email;
+
+    const list = getWatchlist();
+    document.getElementById('stat-total').textContent = list.length;
+    document.getElementById('stat-watched').textContent = list.filter(m => m.watched).length;
+    document.getElementById('stat-unwatched').textContent = list.filter(m => !m.watched).length;
+  </script>
+</body>
+</html>

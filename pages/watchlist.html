@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MovieMate – Watchlist</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-brand">Movie<span>Mate</span></div>
+    <ul class="navbar-nav">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="watchlist.html" class="active">Watchlist</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li><a href="#" onclick="logoutUser()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="section">
+    <h2 class="section-title">📋 My Watchlist</h2>
+
+    <div class="tabs">
+      <button class="tab active" onclick="filterList('all', this)">All</button>
+      <button class="tab" onclick="filterList('movies', this)">Movies</button>
+      <button class="tab" onclick="filterList('tv', this)">TV Shows</button>
+      <button class="tab" onclick="filterList('unwatched', this)">Unwatched</button>
+      <button class="tab" onclick="filterList('watched', this)">Watched</button>
+    </div>
+
+    <div id="watchlist-container"></div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/watchlist.js"></script>
+  <script>
+    requireAuth();
+    let currentFilter = 'all';
+
+    function filterList(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderWatchlist();
+    }
+
+    function renderWatchlist() {
+      let list = getWatchlist();
+      if (currentFilter === 'movies') list = list.filter(m => m.media_type === 'movie');
+      else if (currentFilter === 'tv') list = list.filter(m => m.media_type === 'tv');
+      else if (currentFilter === 'unwatched') list = list.filter(m => !m.watched);
+      else if (currentFilter === 'watched') list = list.filter(m => m.watched);
+
+      const container = document.getElementById('watchlist-container');
+      container.innerHTML = '';
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>Nothing here yet</h3>
+            <p>Search for movies and shows to add to your watchlist.</p>
+            <a href="search.html"><button class="btn btn-primary" style="margin-top:16px">Browse Movies</button></a>
+          </div>`;
+        return;
+      }
+
+      list.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'watchlist-item';
+        div.innerHTML = `
+          <img src="${getImageURL(item.poster_path)}" alt="${item.title}"/>
+          <div class="watchlist-item-info">
+            <div class="watchlist-item-title">${item.title}</div>
+            <div class="watchlist-item-meta">${item.media_type === 'tv' ? 'TV Show' : 'Movie'}</div>
+          </div>
+          <div class="watchlist-actions">
+            <span class="watched-badge ${item.watched ? 'watched' : 'unwatched'}" 
+              id="badge-${item.id}">${item.watched ? '✓ Watched' : 'Unwatched'}</span>
+            <button class="btn btn-outline" style="padding:6px 12px;font-size:0.8rem"
+              onclick="handleToggle(${item.id})">Toggle</button>
+            <button class="btn" style="padding:6px 12px;font-size:0.8rem;background:#f44336;color:white"
+              onclick="handleRemove(${item.id}, this)">Remove</button>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
+    function handleToggle(id) {
+      toggleWatched(id);
+      renderWatchlist();
+    }
+
+    function handleRemove(id, btn) {
+      removeFromWatchlist(id);
+      renderWatchlist();
+    }
+
+    renderWatchlist();
+  </script>
+</body>
+</html>
