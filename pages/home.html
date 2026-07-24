@@ -52,6 +52,10 @@
   <script>
     const user = requireAuth();
 
+    if (typeof initHome === 'function') {
+      initHome();
+    }
+
     function createCard(item) {
       const type = item.media_type || (item.title ? 'movie' : 'tv');
       const card = document.createElement('div');
