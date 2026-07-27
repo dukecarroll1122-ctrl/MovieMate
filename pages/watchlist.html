@@ -30,6 +30,19 @@
       <button class="tab" onclick="filterList('watched', this)">Watched</button>
     </div>
 
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+      <label style="color:#aaa; font-size:0.9rem;">Sort by:</label>
+      <select id="sort-select" onchange="renderWatchlist()" style="
+        background:#1e1e2e; color:#fff; border:1px solid #2a2a3e;
+        border-radius:8px; padding:8px 12px; font-size:0.9rem; cursor:pointer;">
+        <option value="date-added">Date Added</option>
+        <option value="title-asc">Title (A–Z)</option>
+        <option value="title-desc">Title (Z–A)</option>
+        <option value="rating-high">Rating (High–Low)</option>
+        <option value="rating-low">Rating (Low–High)</option>
+      </select>
+    </div>
+
     <div id="watchlist-container"></div>
   </div>
 
@@ -37,6 +50,7 @@
   <script src="../js/auth.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/watchlist.js"></script>
+  <script src="../js/app.js"></script>
   <script>
     requireAuth();
     let currentFilter = 'all';
@@ -48,12 +62,31 @@
       renderWatchlist();
     }
 
+    function sortList(list) {
+      const sort = document.getElementById('sort-select').value;
+      switch (sort) {
+        case 'title-asc':
+          return [...list].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        case 'title-desc':
+          return [...list].sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+        case 'rating-high':
+          return [...list].sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
+        case 'rating-low':
+          return [...list].sort((a, b) => (a.vote_average || 0) - (b.vote_average || 0));
+        case 'date-added':
+        default:
+          return [...list].sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+      }
+    }
+
     function renderWatchlist() {
       let list = getWatchlist();
       if (currentFilter === 'movies') list = list.filter(m => m.media_type === 'movie');
       else if (currentFilter === 'tv') list = list.filter(m => m.media_type === 'tv');
       else if (currentFilter === 'unwatched') list = list.filter(m => !m.watched);
       else if (currentFilter === 'watched') list = list.filter(m => m.watched);
+
+      list = sortList(list);
 
       const container = document.getElementById('watchlist-container');
       container.innerHTML = '';
@@ -78,12 +111,13 @@
             <div class="watchlist-item-meta">${item.media_type === 'tv' ? 'TV Show' : 'Movie'}</div>
           </div>
           <div class="watchlist-actions">
-            <span class="watched-badge ${item.watched ? 'watched' : 'unwatched'}" 
-              id="badge-${item.id}">${item.watched ? '✓ Watched' : 'Unwatched'}</span>
+            <span class="watched-badge ${item.watched ? 'watched' : 'unwatched'}">
+              ${item.watched ? '✓ Watched' : 'Unwatched'}
+            </span>
             <button class="btn btn-outline" style="padding:6px 12px;font-size:0.8rem"
               onclick="handleToggle(${item.id})">Toggle</button>
             <button class="btn" style="padding:6px 12px;font-size:0.8rem;background:#f44336;color:white"
-              onclick="handleRemove(${item.id}, this)">Remove</button>
+              onclick="handleRemove(${item.id})">Remove</button>
           </div>`;
         container.appendChild(div);
       });
@@ -94,7 +128,7 @@
       renderWatchlist();
     }
 
-    function handleRemove(id, btn) {
+    function handleRemove(id) {
       removeFromWatchlist(id);
       renderWatchlist();
     }
