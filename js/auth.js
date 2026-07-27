@@ -20,7 +20,7 @@ function loginUser(email, password) {
 
 function logoutUser() {
   localStorage.removeItem('mm_current_user');
-  window.location.href = 'index.html';
+  window.location.href = '../index.html';
 }
 
 function getCurrentUser() {
