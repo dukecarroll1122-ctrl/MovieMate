@@ -8,6 +8,14 @@ The application uses The Movie Database (TMDB) API to display trending titles, p
 
 MovieMate was created by Group 7 as a semester project for CIS 1512: Software Engineering.
 
+**Application Preview**
+
+![MovieMate Home Page](images/moviemate-home.png)
+
+**Watchlist Features**
+
+![MovieMate Watchlist Page](images/moviemate-watchlist.png)
+
 ## Main Features
 
 - Create an account and log in
