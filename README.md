@@ -1,11 +1,5 @@
 # Movie-Watchlist-App MovieMate
 
-
-
-
-
-# ```text
-
 # 
 
 # \# MovieMate
@@ -24,133 +18,93 @@
 
 # 
 
-# \## Main Features
+# Main Features
 
 # 
 
-# \- Create an account and log in
+# Create an account and log in
 
-# \- View trending and popular movies and television shows
+# View trending and popular movies and television shows
 
-# \- Search for movies and television shows
+# Search for movies and television shows
 
-# \- View posters, ratings, release years, genres, and descriptions
+# View posters, ratings, release years, genres, and descriptions
 
-# \- Add and remove titles from a personal watchlist
+# Add and remove titles from a personal watchlist
 
-# \- Mark titles as watched or unwatched
+# Mark titles as watched or unwatched
 
-# \- Filter the watchlist by:
+# Filter the watchlist by movies, television shows, watched, or unwatched
 
-# &#x20; - Movies
+# Sort the watchlist by title, rating, or date added
 
-# &#x20; - Television shows
+# View profile information and watchlist totals
 
-# &#x20; - Watched titles
-
-# &#x20; - Unwatched titles
-
-# \- Sort the watchlist by:
-
-# &#x20; - Title
-
-# &#x20; - Rating
-
-# &#x20; - Date added
-
-# \- View profile information and watchlist totals
-
-# \- Use the application on different screen sizes
+# Use the application on different screen sizes
 
 # 
 
-# \## Technologies Used
+# Technologies Used
 
 # 
 
-# \- HTML
+# HTML
 
-# \- CSS
+# CSS
 
-# \- JavaScript
+# JavaScript
 
-# \- TMDB API
+# TMDB API
 
-# \- Browser Local Storage
+# Browser Local Storage
 
-# \- Git
+# Git
 
-# \- GitHub
-
-# 
-
-# \## Project Structure
+# GitHub
 
 # 
 
-# 
-
-# movie-watchlist-app/
-
-# │
-
-# ├── index.html
-
-# ├── README.md
-
-# │
-
-# ├── css/
-
-# │   └── style.css
-
-# │
-
-# ├── js/
-
-# │   ├── api.js
-
-# │   ├── app.js
-
-# │   ├── auth.js
-
-# │   ├── config.js
-
-# │   └── watchlist.js
-
-# │
-
-# └── pages/
-
-# &#x20;   ├── home.html
-
-# &#x20;   ├── profile.html
-
-# &#x20;   ├── search.html
-
-# &#x20;   └── watchlist.html
-
-# ```
+# Project Structure
 
 # 
 
-# \## How to Run MovieMate
+# index.html — Login and registration page
+
+# css/style.css — Main application styles
+
+# js/api.js — TMDB API functions
+
+# js/app.js — Shared application functions
+
+# js/auth.js — Registration, login, and logout functions
+
+# js/config.js — TMDB API settings
+
+# js/watchlist.js — Watchlist functions
+
+# pages/home.html — Trending and popular titles
+
+# pages/search.html — Movie and television search
+
+# pages/watchlist.html — Saved titles, filters, and sorting
+
+# pages/profile.html — User information and watchlist totals
 
 # 
 
-# 1\. Download or clone the project.
-
-# 2\. Open the project folder in Visual Studio Code.
-
-# 3\. Create a free account with The Movie Database and get a TMDB API key.
-
-# 4\. Open `js/config.js`.
-
-# 5\. Add the API key using the following format:
+# How to Run MovieMate
 
 # 
 
-# ```javascript
+# Download or clone the project.
+
+# Open the project folder in Visual Studio Code.
+
+# Create a free account with The Movie Database and get a TMDB API key.
+
+# Open js/config.js.
+
+# Replace YOUR\_TMDB\_API\_KEY with the API key:
 
 # const CONFIG = {
 
@@ -162,17 +116,13 @@
 
 # };
 
-# ```
+# Right-click index.html and select Open with Live Server.
+
+# Create an account and log in to use MovieMate.
 
 # 
 
-# 6\. Open `index.html` using the Live Server extension.
-
-# 7\. Create an account and log in to use MovieMate.
-
-# 
-
-# \## Data Storage
+# Data Storage
 
 # 
 
@@ -180,23 +130,23 @@
 
 # 
 
-# \- Registered user accounts
+# Registered user accounts
 
-# \- The currently logged-in user
+# The currently logged-in user
 
-# \- Personal watchlist items
+# Personal watchlist items
 
-# \- Watched and unwatched status
+# Watched and unwatched status
 
-# \- The date each title was added
-
-# 
-
-# The saved information is available only in the same browser and on the same device.
+# The date each title was added
 
 # 
 
-# \## Current Project Scope
+# The information is available only in the same browser and on the same device.
+
+# 
+
+# Current Project Scope
 
 # 
 
@@ -208,33 +158,31 @@
 
 # 
 
-# \## Development Team
+# Development Team
 
 # 
 
-# \- Alexander Lor
+# Alexander Lor
 
-# \- Bethlehem Balcha
+# Bethlehem Balcha
 
-# \- Meagan Azzo
+# Meagan Azzo
 
-# \- Sarah O’Neil
+# Sarah O’Neil
 
-# \- Randy Carroll
-
-# 
-
-# \## Course Information
+# Randy Carroll
 
 # 
 
-# \- Course: CIS 1512: Software Engineering
+# Course Information
 
-# \- Project: MovieMate
+# 
 
-# \- Group: Group 7
+# Course: CIS 1512: Software Engineering
 
-# \- Year: 2026
+# Project: MovieMate
 
+# Group: Group 7
 
+# Year: 2026
 
