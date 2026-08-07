@@ -8,7 +8,7 @@ function getImageURL(path) { return path ? `https://image.tmdb.org/t/p/w500${pat
 async function handleSearch() {
     try {
         const query = document.getElementById('searchbar').value;
-        const items = await TMDBService.searchMedia(query);
+        const items = await searchMovies(query);
         items.forEach(item => console.log(`Found: ${item.title || item.name}`));
     } catch (error) {
         console.error('Error during search:', error);
@@ -17,8 +17,8 @@ async function handleSearch() {
 
 async function handleAddToWatchlist(selectedMediaItem) {
     try {
-        const result = await WatchlistService.addToWatchList(selectedMediaItem);
-        alert(result.message);
+        const result = addToWatchlist(selectedMediaItem);
+        alert(result ? 'Added to watchlist!' : 'Already in watchlist.');
     } catch (error) {
         console.error('Error adding to watchlist:', error);
         alert("Failed to add item to watchlist.");
@@ -42,7 +42,7 @@ function createCard(item) {
 
 function renderGrid(containerId, items) {
     const el = document.getElementById(containerId);
-    if (!el) return; // Guard clause if element doesn't exist on current page
+    if (!el) return;
     el.innerHTML = '';
     if (!items || items.length === 0) {
         el.innerHTML = '<p style="color:#aaa">Nothing to show right now.</p>';
@@ -54,11 +54,10 @@ function renderGrid(containerId, items) {
 // --- Main Homepage Initializer ---
 async function initHome() {
     try {
-        // Safe mapping to your TMDBService API methods
         const [trending, movies, tv] = await Promise.all([
-            TMDBService.getTrending ? TMDBService.getTrending() : Promise.resolve([]),
-            TMDBService.getPopular ? TMDBService.getPopular('movie') : Promise.resolve([]),
-            TMDBService.getPopular ? TMDBService.getPopular('tv') : Promise.resolve([])
+            fetchTrending(),
+            getPopular('movie'),
+            getPopular('tv')
         ]);
 
         renderGrid('trending-grid', trending);
@@ -79,10 +78,8 @@ async function openModal(id, type) {
     content.innerHTML = '<div class="loading"><div class="spinner"></div>Loading...</div>';
     
     try {
-        // Connect properly to TMDBService implementation
-        const movie = await TMDBService.getMovieDetails(id, type);
-        // Safe validation checks using WatchlistService storage properties
-        const inList = WatchlistService.isInWatchlist ? WatchlistService.isInWatchlist(movie.id) : false;
+        const movie = await getMovieDetails(id, type);
+        const inList = isInWatchlist(movie.id);
         const genres = (movie.genres || []).map(g => `<span class="badge">${g.name}</span>`).join('');
         
         content.innerHTML = `
@@ -105,20 +102,20 @@ async function openModal(id, type) {
             toggleWatchlistBtn(movie, this, type);
         };
     } catch(err) {
+        console.error('openModal error:', err);
         content.innerHTML = '<p>Error loading descriptions.</p>';
     }
 }
 
 function toggleWatchlistBtn(movie, btn, type) {
-    const inList = WatchlistService.isInWatchlist ? WatchlistService.isInWatchlist(movie.id) : false;
+    const inList = isInWatchlist(movie.id);
     if (inList) {
-        if (WatchlistService.removeFromWatchlist) WatchlistService.removeFromWatchlist(movie.id);
+        removeFromWatchlist(movie.id);
         btn.className = 'btn btn-primary';
         btn.textContent = '+ Add to Watchlist';
     } else {
-        // Normalize item property mapping to match service model expectations
         movie.media_type = type;
-        WatchlistService.addToWatchList(movie);
+        addToWatchlist(movie);
         btn.className = 'btn btn-outline';
         btn.textContent = '✓ In Watchlist';
     }
